@@ -1,0 +1,35 @@
+<resources>
+    <string name="app_name">Starwars Demo</string>
+    <string name="title_character_details">Character Details</string>
+    <string name="title_search_details">Module Title</string>
+
+    <string name="title_search">Search</string>
+    <string name="character_search_intro">Welcome to the Starwars Character Search app. Search for your favourite characters and view exciting information about them</string>
+    <string name="app_label">Starwars Character Search</string>
+    <string name="search_hint">Name of character</string>
+
+    <string name="character_search_tutorial">Type in a any name to view matching character. You will get to know more details like their bio data, films, vehicles starships, places they call home and many more.</string>
+
+    <string name="name">Name:</string>
+    <string name="language">Language:</string>
+    <string name="homeworld">Homeworld:</string>
+    <string name="population">Population:</string>
+    <string name="movies">Movies:</string>
+    <string name="specie">Specie:</string>
+    <string name="birth_year">Date of Birth:</string>
+    <string name="gender">Gender</string>
+    <string name="character_bio">Character Bio</string>
+    <string name="height">Height</string>
+    <string name="title">Title</string>
+    <string name="created">Created</string>
+    <string name="director">Director</string>
+    <string name="opening_crawl">Opening Crawl</string>
+    <string name="featured_movies">Movies Featured in</string>
+    <string name="character_not_found" translatable="false">Character Not found</string>
+    <string name="clear_recent_searches">Clear recent searches</string>
+
+    <string name="retry">Retry</string>
+    <string name="error_text">Something went wrong. Tap to reload</string>
+    <string name="recent_searches">Recent Searches</string>
+    <string name="title_activity_compose">ComposeActivity</string>
+</resources>
