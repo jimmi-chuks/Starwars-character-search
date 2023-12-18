@@ -139,7 +139,7 @@ class MainActivity : AppCompatActivity() {
 
     object Destination {
         data object HomeRoute {
-            val route: String = "HomeRoute"
+            const val ROUTE: String = "HomeRoute"
         }
 
         data object CharacterSearchList : ArgumentDestination<SearchArgs>
