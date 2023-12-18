@@ -70,8 +70,8 @@ class MainActivity : AppCompatActivity() {
     fun Content() {
         val navController = rememberNavController()
 
-        NavHost(navController = navController, startDestination = "HomeRoute") {
-            composable(route = "HomeRoute") {
+        NavHost(navController = navController, startDestination = Destination.HomeRoute.route) {
+            composable(route = Destination.HomeRoute.route) {
                 val viewModel = viewModel { HomeViewModel(recentSearchesUseCase) }
                 HomeScreen(
                     viewModel = viewModel,
