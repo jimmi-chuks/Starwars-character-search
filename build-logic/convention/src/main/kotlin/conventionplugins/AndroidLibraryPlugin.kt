@@ -1,7 +1,5 @@
 import com.android.build.gradle.LibraryExtension
-import extension.androidCompileSdk
 import extension.androidTargetSdk
-import org.gradle.api.JavaVersion
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
@@ -11,7 +9,6 @@ class AndroidLibraryPlugin : Plugin<Project> {
         with(target) {
             with(pluginManager){
                 apply("com.android.library")
-                apply("org.jetbrains.kotlin.android")
                 apply("kotlin-android")
             }
 

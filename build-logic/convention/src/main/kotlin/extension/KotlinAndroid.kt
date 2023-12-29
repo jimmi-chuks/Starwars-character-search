@@ -28,6 +28,8 @@ import org.gradle.kotlin.dsl.provideDelegate
 import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import extension.libraryDependencyCoordinate
+import extension.projectJvmTarget
+import org.gradle.jvm.toolchain.JavaLanguageVersion
 
 /**
  * Configure base Kotlin with Android options
@@ -42,13 +44,10 @@ internal fun Project.configureKotlinAndroid(
             minSdk = androidMinSdk()
         }
 
-        compileOptions {
-            sourceCompatibility = jvmTargetResolution()
-            targetCompatibility = jvmTargetResolution()
-            isCoreLibraryDesugaringEnabled = true
-        }
+        compileOptions.isCoreLibraryDesugaringEnabled = true
     }
 
+    configureJvmToolchain()
     configureKotlin()
 
     dependencies {
@@ -56,26 +55,20 @@ internal fun Project.configureKotlinAndroid(
     }
 }
 
-/**
- * Configure base Kotlin options for JVM (non-Android)
- */
-internal fun Project.configureKotlinJvm() {
+internal fun Project.configureJvmToolchain() {
     extensions.configure<JavaPluginExtension> {
-        sourceCompatibility = jvmTargetResolution()
-        targetCompatibility = jvmTargetResolution()
+        toolchain {
+            languageVersion.set(JavaLanguageVersion.of(projectJvmTarget()))
+        }
     }
-
-    configureKotlin()
 }
 
 /**
  * Configure base Kotlin options
  */
-private fun Project.configureKotlin() {
+internal fun Project.configureKotlin() {
     tasks.withType<KotlinCompile>().configureEach {
         kotlinOptions {
-            // Set JVM target to 11
-            jvmTarget = jvmTargetResolution().toString()
             // Treat all Kotlin warnings as errors (disabled by default)
             // Override by setting warningsAsErrors=true in your ~/.gradle/gradle.properties
             val warningsAsErrors: String? by project

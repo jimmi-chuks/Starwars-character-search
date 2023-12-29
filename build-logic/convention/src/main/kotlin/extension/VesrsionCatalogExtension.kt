@@ -31,3 +31,5 @@ internal fun Project.androidMinSdk(): Int = catalogIntVersion("androidMinSdk")
 internal fun Project.composeCompilerVersion(): String = catalogStringVersion("composeCompilerVersion")
 
 internal fun jvmTargetResolution(): JavaVersion = JavaVersion.VERSION_17
+
+internal fun Project.projectJvmTarget(): String = catalogStringVersion("jvmTarget")

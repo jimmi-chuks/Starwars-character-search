@@ -15,12 +15,7 @@
  */
 
 import com.android.build.api.dsl.ApplicationExtension
-import extension.androidCompileSdk
-import extension.androidMinSdk
-import extension.androidTargetSdk
 import extension.configureAndroidCompose
-import extension.pluginDependencyCoordinate
-import org.gradle.api.JavaVersion
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.getByType
