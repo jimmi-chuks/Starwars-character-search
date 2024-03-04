@@ -4,13 +4,6 @@ plugins {
 
 android {
     namespace = "com.dani.compose_ui"
-    buildFeatures {
-        compose = true
-    }
-
-    composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.compose.get()
-    }
 }
 
 dependencies {

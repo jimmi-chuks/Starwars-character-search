@@ -7,9 +7,6 @@ import javax.inject.Scope
 @kotlin.annotation.Retention
 annotation class ActivityScope
 
-@Scope
-@kotlin.annotation.Retention
-annotation class FragmentScope
 
 @Scope
 @kotlin.annotation.Retention

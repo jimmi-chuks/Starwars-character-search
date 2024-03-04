@@ -61,20 +61,21 @@ class SearchViewModel(
             }
 
             viewModelScope.launch(dispatchersProvider.io) {
-                searchCharacterUseCase.getNextCharacterPage(page, query)
-                    .onRight { searchResult ->
+                searchCharacterUseCase.getNextCharacterPage(page, query).fold(
+                    ifRight = { searchResult ->
                         val state = _state.value
                         _state.value = state.copy(
                             displayState = DisplayState.NO_LOADING,
                             characters = (state.characters + searchResult.results).distinct(),
                             nextPageUrl = searchResult.next
                         )
-                    }
-                    .onLeft {
+                    },
+                    ifLeft =  {
                         val state = _state.value
                         _state.value = state.copy(displayState = DisplayState.NO_LOADING)
                         _effect.tryEmit(Effect.ShowNextPageError)
                     }
+                )
             }
         }
     }

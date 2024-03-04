@@ -34,6 +34,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -43,6 +44,7 @@ import com.dani.domain.usecases.CharacterDetails
 import com.dani.domain.usecases.MovieData
 import com.dani.domain.usecases.PlanetData
 import com.dani.domain.usecases.SpeciesData
+import com.dani.starwars.R
 
 
 @Composable
@@ -88,7 +90,7 @@ internal fun Content(
             modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
             topBar = {
                 TopAppBar(
-                    title = { Text(text = "Character Details") },
+                    title = { Text(text = stringResource(id = R.string.title_character_details)) },
                     navigationIcon = {
                         IconButton(
                             onClick = { onBackButtonTapped() },
@@ -103,28 +105,25 @@ internal fun Content(
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     CircularProgressIndicator()
                 }
-            } else if (showError) {
+            } else if (characterDetails == null || showError) {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     Column(modifier = Modifier
                         .clickable { onRetryDataFetch() }
                         .padding(16.dp)) {
                         Text(
-                            text = "Error loading Character details",
+                            text = stringResource(id = R.string.error_loading_character),
                             modifier = Modifier.padding(8.dp)
                         )
                         TextButton(onClick = { onRetryDataFetch() }) {
-                            Text("Refresh")
+                            Text(stringResource(id = R.string.refresh))
                         }
                     }
                 }
             } else {
-                characterDetails?.let {
-                    CharacterDetailsContent(
-                        characterDetails = characterDetails,
-                        paddingValues = padding
-                    )
-                }
-
+                CharacterDetailsContent(
+                    characterDetails = characterDetails,
+                    paddingValues = padding
+                )
             }
         }
     }
@@ -149,12 +148,12 @@ internal fun CharacterDetailsContent(
             )
         }
 
-        characterDetails.speciesData?.let { speciesData ->
+        if(characterDetails.speciesData.isNotEmpty()){
             item {
                 Spacer(modifier = Modifier.height(16.dp))
             }
 
-            items(speciesData){ specieItem ->
+            items(characterDetails.speciesData){ specieItem ->
                 SpecieItem(speciesData = specieItem)
             }
         }

@@ -27,6 +27,10 @@
     <string name="featured_movies">Movies Featured in</string>
     <string name="character_not_found" translatable="false">Character Not found</string>
     <string name="clear_recent_searches">Clear recent searches</string>
+    <string name="error_loading_character">Error loading Character details</string>
+    <string name="refresh">Refresh</string>
+    <string name="character_search_title">Character Search</string>
+    <string name="no_matching_character">No Matching Character</string>
 
     <string name="retry">Retry</string>
     <string name="error_text">Something went wrong. Tap to reload</string>

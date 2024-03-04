@@ -50,8 +50,13 @@ dependencies {
     testImplementation(libs.bundles.unitTest)
 
     implementation(libs.dagger.core)
+
     androidTestImplementation(libs.compose.uiTest)
-//    debugImplementation(libs.compose.uiTest)
+    debugImplementation(libs.compose.testManifest)
+
+    androidTestImplementation(libs.test.mockitoAndroid)
+    androidTestImplementation(libs.test.mockitoKotlin)
+
     kapt(libs.dagger.compiler)
     compileOnly(libs.javaxAnnotation)
 

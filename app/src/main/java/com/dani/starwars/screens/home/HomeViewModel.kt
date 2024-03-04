@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
@@ -36,10 +37,12 @@ class HomeViewModel(
 
     init {
         recentSearchesUseCase.getRecentSearches()
+            .map { recentSearchEntities ->
+                recentSearchEntities.map { it.searchString }
+            }
             .flowOn(backgroundDispatcher)
             .onEach { list ->
-                val searches = list.map { it.searchString }
-                _state.value = _state.value.copy(recentSearches = searches)
+                _state.value = _state.value.copy(recentSearches = list)
             }
             .launchIn(viewModelScope)
     }
@@ -93,8 +96,8 @@ class HomeViewModel(
     private fun onPerformCharacterSearch(searchParam: String) {
         if (searchParam.isNotBlank()) {
             viewModelScope.launch {
-                recentSearchesUseCase.addToRecentSearch(searchParam)
                 _effect.emit(Effect.NavigateToSearchScreen(searchParam))
+                recentSearchesUseCase.addToRecentSearch(searchParam)
             }
         }
     }
@@ -107,7 +110,7 @@ class HomeViewModel(
     }
 
     @VisibleForTesting
-    fun setState(state: State){
+    fun setState(state: State) {
         _state.value = state
     }
 

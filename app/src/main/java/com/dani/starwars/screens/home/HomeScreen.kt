@@ -35,6 +35,7 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.isTraversalGroup
 import androidx.compose.ui.semantics.semantics
@@ -84,8 +85,8 @@ fun HomeScreen(
 
 @Composable
 fun HomeScreenContent(
-    suggestions: List<String>,
-    fullScreenSearchActive: Boolean,
+    suggestions: List<String> = emptyList(),
+    fullScreenSearchActive: Boolean = false,
     onBackPressed: () -> Unit,
     performSearch: (String) -> Unit,
     clearRecentSearches: () -> Unit,
@@ -127,11 +128,12 @@ fun HomeScreenContent(
 }
 
 @Composable
-private fun TopSection() {
+internal fun TopSection() {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp),
+            .padding(16.dp)
+            .testTag("Top Section"),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Spacer(modifier = Modifier.height(48.dp))
@@ -225,7 +227,8 @@ private fun RecentSearchSuggestions(
     clearRecentSearches: () -> Unit
 ) {
     LazyColumn(modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)) {
-        if (recentSearches.isNotEmpty()) {
+        val recentSearchesEmpty = recentSearches.isEmpty()
+        if (!recentSearchesEmpty) {
             item {
                 Text(text = "recent Searches")
                 Spacer(modifier = Modifier.height(4.dp))
@@ -239,10 +242,10 @@ private fun RecentSearchSuggestions(
                     .clickable { searchSuggestion(searchItem) }
             )
         }
-        if (recentSearches.isNotEmpty()) {
+        if (!recentSearchesEmpty) {
             item {
                 Text(
-                    text = "Clear recent Searches",
+                    text = stringResource(id = R.string.clear_recent_searches),
                     modifier = Modifier.clickable { clearRecentSearches() }
                 )
                 Spacer(modifier = Modifier.height(4.dp))

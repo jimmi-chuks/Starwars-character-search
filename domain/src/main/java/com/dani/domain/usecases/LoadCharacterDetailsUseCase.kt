@@ -42,9 +42,10 @@ class LoadCharacterDetailsUseCase @Inject constructor(
 
     private suspend fun getMoviesDetails(movieList: List<String>): List<Movie> =
         coroutineScope {
-            movieList.parallelFetchList(dispatchersProvider.io) {
-                movieRepository.getMovieDetails(it)
-            }
+            movieList.parallelFetchList(
+                coroutineContext = dispatchersProvider.io,
+                block = { movieRepository.getMovieDetails(it) }
+            )
         }
 
     private suspend fun getSpeciesDetails(specieList: List<String>): List<Specie> = coroutineScope {

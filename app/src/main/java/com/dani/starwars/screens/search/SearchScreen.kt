@@ -85,7 +85,7 @@ fun SearchListScreen(
             modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
             topBar = {
                 TopAppBar(
-                    title = { Text(text = "Character Search") },
+                    title = { Text(text = stringResource(id = R.string.character_search_title)) },
                     navigationIcon = {
                         IconButton(
                             onClick = { viewModel.onEvent(SearchViewModel.Event.BackButtonTapped) },
@@ -153,7 +153,7 @@ fun Content(
                     }
                     if (state.characters.isEmpty()) {
                         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                            Text(text = "No Matching Character")
+                            Text(text = stringResource(id = R.string.no_matching_character))
                         }
                     }
                     if (state.displayState == SearchViewModel.DisplayState.NEXT_PAGE_LOADING) {
@@ -181,7 +181,7 @@ internal fun Error(onRetry: () -> Unit) {
             onClick = onRetry,
             modifier = Modifier.padding(vertical = 16.dp, horizontal = 32.dp)
         ) {
-            Text("Retry")
+            Text(stringResource(id = R.string.retry))
         }
     }
 }
