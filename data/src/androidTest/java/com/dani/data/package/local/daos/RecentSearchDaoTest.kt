@@ -13,8 +13,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.test.TestCoroutineDispatcher
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.hamcrest.CoreMatchers.`is`
 import org.junit.After
@@ -36,7 +38,7 @@ class RecentSearchDaoTest {
     lateinit var recentSearchDao: RecentSearchDao
     lateinit var db: AppDatabase
 
-    val testDispatcher: TestCoroutineDispatcher = TestCoroutineDispatcher()
+    private val testDispatcher: TestCoroutineDispatcher = TestCoroutineDispatcher()
 
     @Before
     fun createDb() {
@@ -56,7 +58,7 @@ class RecentSearchDaoTest {
 
     @Test
     @Throws(*[Exception::class])
-    fun insertAndReadInList() = runBlockingTest(TestCoroutineDispatcher()){
+    fun insertAndReadInList() = runTest(UnconfinedTestDispatcher()){
         val first =  RecentSearchEntity("dave", 23199292L)
         recentSearchDao.insert(first)
         val addedSearch = recentSearchDao.getAll().firstOrNull()!![0]

@@ -1,4 +1,4 @@
-package com.dani.starwars.screens.search
+package com.dani.starwars.screens.character.search
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -15,7 +15,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -69,7 +69,7 @@ fun SearchListScreen(
         viewModel.effect.flowWithLifecycle(lifecycle = currentLifecycle).collect {
             when (it) {
                 SearchViewModel.Effect.NavigateBack -> navigateBack()
-                is SearchViewModel.Effect.NavigateToCharacterDetails -> navigateToCharacter(it.characterId)
+                is SearchViewModel.Effect.NavigateToCharacterDetails -> navigateToCharacter(it.characterUrl)
                 SearchViewModel.Effect.ShowNextPageError -> {
                     scope.launch {
                         snackbarHostState.showSnackbar("Unable to fetch next page")
@@ -89,7 +89,7 @@ fun SearchListScreen(
                     navigationIcon = {
                         IconButton(
                             onClick = { viewModel.onEvent(SearchViewModel.Event.BackButtonTapped) },
-                            content = { Icon(Icons.Filled.ArrowBack, "Back Button") }
+                            content = { Icon(Icons.AutoMirrored.Filled.ArrowBack, "Back Button") }
                         )
                     },
                     scrollBehavior = scrollBehavior

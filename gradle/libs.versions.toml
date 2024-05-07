@@ -1,7 +1,7 @@
 [versions]
-agp = "8.4.0-alpha12"
-lifecycle = "2.6.2"
-coroutine = "1.7.3"
+agp = "8.4.0" ## "8.5.0-alpha08"
+lifecycle = "2.7.0"
+coroutine = "1.8.0-RC2"
 kotlin = "1.9.20"
 androidDesugarJdkLibs = "2.0.4"
 androidGradle = "7.2.2"
@@ -12,16 +12,16 @@ javaxAnnotation = "1.0"
 retrofit = "2.9.0"
 retrofitKotlinxSerializationJson = "1.0.0"
 okhttp3LoggingInterceptor = "4.12.0"
-androidXCore = "1.12.0"
-fragmentKtx = "1.6.2"
-activity = "1.8.1"
+androidXCore = "1.13.1"
+fragmentKtx = "1.7.0"
+activity = "1.9.0"
 appCompat = "1.6.1"
-material = "1.10.0"
-compose = "1.5.4" # ensure it matches version specified in Dependnecies.kt defined in buildsrc
-composeBom = "2023.10.01"
-composeNavigation = "2.7.6"
-composeMaterial3 = "1.1.2"
-composeFonts = "1.5.4"
+material = "1.12.0"
+compose = "1.6.7" # ensure it matches version specified in Dependnecies.kt defined in buildsrc
+composeBom = "2024.05.00"
+composeNavigation = "2.7.7"
+composeMaterial3 = "1.2.1"
+composeFonts = "1.6.7"
 recyclerView = "1.3.2"
 constraintLayout = "2.1.4"
 junit = "4.+"
@@ -67,7 +67,6 @@ javaxAnnotation = { module = "javax.annotation:jsr250-api", version.ref = "javax
 
 android-desugarJdkLibs = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "androidDesugarJdkLibs" }
 
-android-gradle = { module = "com.android.tools.build:gradle", version.ref = "androidGradle" }
 kotlin-gradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
 

@@ -1,4 +1,4 @@
-package com.dani.starwars.screens.characterdetails
+package com.dani.starwars.screens.character.details
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -15,7 +15,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -94,7 +94,7 @@ internal fun Content(
                     navigationIcon = {
                         IconButton(
                             onClick = { onBackButtonTapped() },
-                            content = { Icon(Icons.Filled.ArrowBack, "Back Button") }
+                            content = { Icon(Icons.AutoMirrored.Filled.ArrowBack, "Back Button") }
                         )
                     },
                     scrollBehavior = scrollBehavior

@@ -1,11 +1,10 @@
-package com.dani.starwars.screens.search
+package com.dani.starwars.screens.character.search
 
 import android.net.UrlQuerySanitizer
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dani.data.DispatchersProvider
-import com.dani.data.getLastPath
 import com.dani.domain.usecases.SearchCharacterUseCase
 import com.dani.model.dto.Character
 import com.dani.starwars.navigation.DestinationArgs
@@ -18,6 +17,9 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 
+interface CharacterFetcher {
+    fun getCharacter(characterUrl: String): Character
+}
 
 @Serializable
 class SearchArgs(val searchParam: String) : DestinationArgs
@@ -26,7 +28,7 @@ class SearchViewModel(
     private val searchCharacterUseCase: SearchCharacterUseCase,
     private val args: SearchArgs,
     val dispatchersProvider: DispatchersProvider,
-) : ViewModel() {
+) : ViewModel(), CharacterFetcher {
     private val _state = MutableStateFlow(State())
     val state = _state.asStateFlow()
 
@@ -56,12 +58,9 @@ class SearchViewModel(
         if (!nextPageUrl.isNullOrBlank() && displayState != DisplayState.NEXT_PAGE_LOADING) {
             _state.value = _state.value.copy(displayState = DisplayState.NEXT_PAGE_LOADING)
 
-            val (page, query) = UrlQuerySanitizer(nextPageUrl).run {
-                Pair(getValue("page").toInt(), getValue("search"))
-            }
-
+            val page = UrlQuerySanitizer(nextPageUrl).getValue("page").toInt()
             viewModelScope.launch(dispatchersProvider.io) {
-                searchCharacterUseCase.getNextCharacterPage(page, query).fold(
+                searchCharacterUseCase.getNextCharacterPage(page, args.searchParam).fold(
                     ifRight = { searchResult ->
                         val state = _state.value
                         _state.value = state.copy(
@@ -70,7 +69,7 @@ class SearchViewModel(
                             nextPageUrl = searchResult.next
                         )
                     },
-                    ifLeft =  {
+                    ifLeft = {
                         val state = _state.value
                         _state.value = state.copy(displayState = DisplayState.NO_LOADING)
                         _effect.tryEmit(Effect.ShowNextPageError)
@@ -85,8 +84,7 @@ class SearchViewModel(
     }
 
     private fun onCharacterTapped(characterUrl: String) {
-        val characterId = requireNotNull(getLastPath(characterUrl) )
-        _effect.tryEmit(Effect.NavigateToCharacterDetails(characterId))
+        _effect.tryEmit(Effect.NavigateToCharacterDetails(characterUrl = characterUrl))
     }
 
     private fun retry() {
@@ -96,12 +94,12 @@ class SearchViewModel(
 
     private fun searchCharacters() {
         viewModelScope.launch(dispatchersProvider.io) {
-            _state.value =  searchCharacterUseCase.searchCharacters(args.searchParam).fold(
+            _state.value = searchCharacterUseCase.searchCharacters(args.searchParam).fold(
                 ifLeft = {
                     Log.e(HomeViewModel.TAG, "search Characters error: $it")
                     _state.value.copy(displayState = DisplayState.ERROR)
                 },
-                ifRight = {searchResult ->
+                ifRight = { searchResult ->
                     _state.value.copy(
                         nextPageUrl = searchResult.next,
                         characters = searchResult.results,
@@ -120,7 +118,8 @@ class SearchViewModel(
     }
 
     sealed class Effect {
-        data class NavigateToCharacterDetails(val characterId: String) : Effect()
+        data class NavigateToCharacterDetails(val characterUrl: String) : Effect()
+
         data object NavigateBack : Effect()
         data object ShowNextPageError : Effect()
     }
@@ -135,7 +134,7 @@ class SearchViewModel(
         INITIAL_LOADING, NO_LOADING, NEXT_PAGE_LOADING, ERROR
     }
 
-    companion object {
-        const val TAG = "HomeViewModel"
-    }
+    override fun getCharacter(characterUrl: String): Character =
+        _state.value.characters.first { it.url == characterUrl }
+
 }

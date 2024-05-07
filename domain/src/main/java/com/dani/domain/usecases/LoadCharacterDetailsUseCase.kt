@@ -3,12 +3,12 @@ package com.dani.domain.usecases
 import arrow.core.Either
 import arrow.fx.coroutines.parZip
 import com.dani.data.DispatchersProvider
-import com.dani.data.datasource.repository.character.CharacterRepository
 import com.dani.data.datasource.repository.movie.MovieRepository
 import com.dani.data.datasource.repository.planet.PlanetRepository
 import com.dani.data.datasource.repository.specie.SpecieRepository
 import com.dani.data.extensions.parallelFetchList
 import com.dani.data.getLastPath
+import com.dani.model.dto.Character
 import com.dani.model.dto.Movie
 import com.dani.model.dto.Specie
 import kotlinx.coroutines.coroutineScope
@@ -18,15 +18,12 @@ class LoadCharacterDetailsUseCase @Inject constructor(
     private val planetRepository: PlanetRepository,
     private val specieRepository: SpecieRepository,
     private val movieRepository: MovieRepository,
-    private val characterRepository: CharacterRepository,
     private val dispatchersProvider: DispatchersProvider
 ) {
 
-    suspend fun getFullCharacterDetails(characterId: String): Either<Throwable, CharacterDetails> =
+    suspend fun getFullCharacterDetails(character: Character): Either<Throwable, CharacterDetails> =
         coroutineScope {
             Either.catch {
-                val character = characterRepository.getCharacter(characterId)
-
                 val specieIdList = character.species?.mapNotNull { getLastPath(it) }
                 val movieUrlList = character.films.mapNotNull { getLastPath(it) }
                 val planetId: String? = character.homeWorld?.let { getLastPath(it) }

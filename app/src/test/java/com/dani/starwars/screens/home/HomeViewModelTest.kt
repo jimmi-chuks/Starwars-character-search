@@ -29,7 +29,7 @@ class HomeViewModelTest {
 
     private val searchResult = AppModuleTestData.searches.map { it.searchString }
 
-    val stateWithSearchResult = HomeViewModel.State(recentSearches = searchResult)
+    private val stateWithSearchResult = HomeViewModel.State(recentSearches = searchResult)
 
     private lateinit var viewModel: HomeViewModel
 

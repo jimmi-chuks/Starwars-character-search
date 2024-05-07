@@ -1,11 +1,13 @@
-package com.dani.starwars.screens.characterdetails
+package com.dani.starwars.screens.character.details
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dani.data.DispatchersProvider
 import com.dani.domain.usecases.CharacterDetails
 import com.dani.domain.usecases.LoadCharacterDetailsUseCase
+import com.dani.model.dto.Character
 import com.dani.starwars.navigation.DestinationArgs
+import com.dani.starwars.screens.character.search.CharacterFetcher
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -13,15 +15,15 @@ import kotlinx.serialization.Serializable
 import javax.inject.Inject
 
 @Serializable
-class CharacterDetailsArgs(val characterId: String) : DestinationArgs
+class CharacterDetailsArgs(val characterUrl: String) : DestinationArgs
 
 class CharacterDetailsViewModel @Inject constructor(
     private val loadCharacterDetailsUseCase: LoadCharacterDetailsUseCase,
-    private val detailsArgs: CharacterDetailsArgs,
-    val dispatchersProvider: DispatchersProvider
+    val dispatchersProvider: DispatchersProvider,
+    private val character: Character,
 ) : ViewModel() {
 
-    val _state: MutableStateFlow<State> = MutableStateFlow(State())
+    private val _state: MutableStateFlow<State> = MutableStateFlow(State())
     val state = _state.asStateFlow()
 
     private val _effect: MutableSharedFlow<Effect> = MutableSharedFlow(
@@ -48,7 +50,7 @@ class CharacterDetailsViewModel @Inject constructor(
     private fun fetchCharacterDetails() {
         viewModelScope.launch(dispatchersProvider.io) {
             _state.value = _state.value.copy(loading = true)
-            loadCharacterDetailsUseCase.getFullCharacterDetails(detailsArgs.characterId)
+            loadCharacterDetailsUseCase.getFullCharacterDetails(character)
                 .onRight {
                     _state.value = _state.value.copy(
                         characterDetails = it,
@@ -72,8 +74,8 @@ class CharacterDetailsViewModel @Inject constructor(
     )
 
     sealed class Event {
-        object NavigateBack : Event()
-        object RetryDataFetch : Event()
+        data object NavigateBack : Event()
+        data object RetryDataFetch : Event()
     }
 
     sealed class Effect {
